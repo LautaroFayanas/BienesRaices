@@ -1,0 +1,32 @@
+{
+  "name": "proyectobienesraices",
+  "version": "1.0.0",
+  "description": "FirstProyect Node.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "css": "postcss public/css/tailwind.css -o public/css/app.css --watch"
+  },
+  "keywords": [
+    "MVC",
+    "Pug",
+    "Tailwind",
+    "MySQL",
+    "Sequelize"
+  ],
+  "author": "Lautaro Fayanas",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.3.1"
+  },
+  "dependencies": {
+    "pug": "^3.0.2"
+  }
+}

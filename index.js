@@ -1,10 +1,23 @@
 // Lo que hace require es extraer express de node_modules para usarlo en este archivo
 import express from 'express'
 import usuarioRoute from './routes/usuarioRoute.js'
+import db from './config/db.js'
 
 
 // Crear App
 const app = express()
+
+// Habilitar lectura de formularios
+app.use(express.urlencoded({extended: true}))
+
+// Conexion Base de Datos
+try {
+    await db.authenticate();
+    console.log('Conexion Correcta a la DB');
+    db.sync()
+} catch (error) {
+    console.log(error);
+}
  
 
 //  Habilitar Pug

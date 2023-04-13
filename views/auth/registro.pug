@@ -6,9 +6,14 @@ block contenido
             span.font-normal Raices
         h2.text-center.text-2xl.font-extrabold= pagina
 
+        if errores  
+            div(class='max-w-md mx-auto my-10')
+                each error in errores
+                    p.text-white.uppercase.text-xs.text-center.p-1.mb-2.font-bold.bg-red-800= error.msg
+
         div.mt-8.mx-auto.max-w-md
             div.bg-white.py-8.px-4.shadow
-                form.space-y-5(method='POST' acction='/auth/registro')
+                form.space-y-5(method='POST' acction='/auth/registro' noValidate)
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for='nombre') Tu nombre
                         input#nombre.w-full.px-2.py-1.border.border-gray-300.rounded-lg.placeholder-gray-400(placeholder='Tu Nombre' type='text' name='nombre')

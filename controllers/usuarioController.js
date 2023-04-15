@@ -82,6 +82,12 @@ const registrar = async (req,res) => {
     })      
 };
 
+// Comprueba una cuenta
+const confirmar = (req,res) => {
+    const { token } = req.params
+    console.log(token);
+}
+
 const formularioOlvidePassword = (req,res) => {
     res.render('auth/olvide-password', {
         pagina: 'Recuperar tu acceso a BienesRaices'
@@ -89,9 +95,12 @@ const formularioOlvidePassword = (req,res) => {
 };
 
 
+
+
 export {
     formularioLogin,
     formularioRegistro,
     registrar,
+    confirmar,
     formularioOlvidePassword
 }

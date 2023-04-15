@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import bcrypt from 'bcryptjs';
 import db from '../config/db.js';
+import bcrypt from 'bcrypt'
 
 // Nombre de la Tabla
 const Usuarios = db.define('usuarios', {
@@ -24,12 +24,16 @@ const Usuarios = db.define('usuarios', {
     }
 }, {
     // Hook de BCRYPT // Hashear Password del Usuario Antes de Subirlo a mi Base de Datos.
-    hook: {
-        beforeCreate: async function(Usuarios) {
-            const hash = await bcrypt.genSalt(10)
-            Usuarios.password = await bcrypt.hash(Usuarios.password, hash);
+    beforeCreate: async function(Usuarios) {
+           try {
+             const salt = await bcrypt.genSalt(10)
+             const hashedPassword = await bcrypt.hash(Usuarios.password, salt);
+             Usuarios.password = hashedPassword
+             Usuarios()
+           } catch (error) {
+            console.log('Hay Error');
+           }
         }
-    }
 });
 
 export default Usuarios;

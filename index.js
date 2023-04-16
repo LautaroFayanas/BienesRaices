@@ -1,5 +1,7 @@
 // Lo que hace require es extraer express de node_modules para usarlo en este archivo
 import express from 'express'
+import csrf from 'csurf'
+import cookieParser from 'cookie-parser'
 import usuarioRoute from './routes/usuarioRoute.js'
 import db from './config/db.js'
 
@@ -9,6 +11,12 @@ const app = express()
 
 // Habilitar lectura de formularios
 app.use(express.urlencoded({extended: true}))
+
+// Habilitar Cookie Parser
+app.use(cookieParser())
+
+// Habilitar CSRF
+app.use(csrf({cookie: true}))
 
 // Conexion Base de Datos
 try {

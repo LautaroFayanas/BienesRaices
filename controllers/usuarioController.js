@@ -11,8 +11,10 @@ const formularioLogin = (req,res) => {
 };
 
 const formularioRegistro = (req,res) => {
+
     res.render('auth/registro', {
-        pagina: 'Crear Cuenta'
+        pagina: 'Crear Cuenta',
+        csrfToken: req.csrfToken()
     })
 };
 
@@ -31,6 +33,7 @@ const registrar = async (req,res) => {
         // No esta vacio, entonces hay errores
         return res.render('auth/registro', {
             pagina: 'Crear Cuenta',
+            csrfToken: req.csrfToken(),
             errores: errors.array(),
             usuario: {
                 nombre: req.body.nombre,
@@ -48,6 +51,7 @@ const registrar = async (req,res) => {
     if(existeUsuario){
         return res.render('auth/registro', {
             pagina: 'Crear Cuenta',
+            csrfToken: req.csrfToken(),
             errores: [{msg: 'El usuario ya esta registrado'}],
             usuario: {
                 nombre: req.body.nombre,
@@ -91,11 +95,19 @@ const confirmar = async (req,res) => {
     if(!usuario){
        return res.render('auth/confirmarCuenta',{
         pagina: 'Error al confirmar tu cuenta',
-        mensaje: 'Hubo un error al confirmar tu cuenta ,intenta de nuevo.',
+        mensaje: 'Hubo un error al confirmar tu cuenta, intenta de nuevo.',
         error: true
        })
     }
-    // Confirmar la Cuenta !
+    // Confirmar la Cuenta 
+    usuario.token = null;
+    usuario.confirmado = true;
+    await usuario.save();       // Metodo del ORM , Guardamos en la Base de Datos. Es como un Commit
+
+    res.render('auth/confirmarCuenta',{
+        pagina: 'Cuenta Confirmada !',
+        mensaje: 'La cuenta se confirmo correctamente.',
+       })
 
     
 }

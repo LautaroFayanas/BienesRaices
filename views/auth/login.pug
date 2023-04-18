@@ -8,7 +8,9 @@ block contenido
 
         div.mt-8.mx-auto.max-w-md
             div.bg-white.py-8.px-4.shadow
-                form.space-y-5
+                form.space-y-5(method='POST' action='/auth/login')
+                    input(type="hidden" name='_csrf' value= csrfToken)
+
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for='email') Email de Registro
                         input#email.w-full.px-2.py-1.border.border-gray-300.rounded-lg.placeholder-gray-400(placeholder='Tu Email' type='email' name='email')

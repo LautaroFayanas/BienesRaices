@@ -1,14 +1,20 @@
 import {check, validationResult} from 'express-validator';
+import bcrypt from 'bcrypt'
 import { generarId } from '../helper/token.js'
+import { emailOlvidePassword, emailRegistro } from '../helper/emails.js';
 import Usuarios from '../models/Usuario.js';
-import { emailRegistro } from '../helper/emails.js';
 
 
 const formularioLogin = (req,res) => {
     res.render('auth/login', {
-        pagina: 'Iniciar Sesion'
+        pagina: 'Iniciar Sesion',
+        csrfToken: req.csrfToken()
     })
 };
+
+const autenticar = (req,res) => {
+    console.log('autenticando');
+}
 
 const formularioRegistro = (req,res) => {
 
@@ -61,15 +67,18 @@ const registrar = async (req,res) => {
         })
     }
 
-
+    
+    
     // Almacenar un Usuario
     const usuario = await Usuarios.create({
-            nombre,
-            email,
-            password,
-            token: generarId(),
+        nombre,
+        email,
+        password,
+        token: generarId(),
     });
     
+    const salt = await bcrypt.genSalt(10)
+    usuario.password = await bcrypt.hash(password, salt);
     //res.json(usuario)
 
     // Enviando email de confirmacion
@@ -136,18 +145,98 @@ const resetPassword = async (req,res) => {
          })
      };
 
-     // Existe el Usuario? Buscar al Usuario ...
-     
+     // Comprobando si el usuario esta registrado
+     const { email } = req.body;
+     const usuario = await Usuarios.findOne({where: {email}})
+     if(!usuario){
+        return res.render('auth/olvide-password', {
+            pagina: 'Recuperar tu acceso a BienesRaices',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'El email no pertenece a ningun usuario'}]
+         })
+     }
+
+     // Generar un Token y enviar el email.
+     usuario.token = generarId();
+     await usuario.save();
+
+     // Enviar un email
+     emailOlvidePassword({
+        email: usuario.email,
+        nombre: usuario.nombre,
+        token: usuario.token
+     });
+
+     // Renderizar un mensaje indicando instrucciones al Usuario via email, de como modificar las password.
+     res.render('templates/mensaje',{
+        pagina: 'Reestablece tu password',
+        mensaje: 'Hemos enviado un email con las instrucciones'
+    })     
 }
 
+const comprobarToken = async (req,res) => {
+    // Si no es valido mostramos un mensaje de error
+    const { token } = req.params;
+    const usuario = await Usuarios.findOne({where:{token}})
+    if(!usuario){
+        return res.render('auth/confirmarCuenta',{
+         pagina: 'Reestablece tu password',
+         mensaje: 'Hubo un error al validar tu informacion, intenta de nuevo.',
+         error: true
+        })
+     };
 
+     // Mostrar formulario para modificar el Password
+     res.render('auth/resetPassword' , {
+        pagina: 'Reestablece tu password aqui =)',
+        csrfToken: req.csrfToken(),
+     })
+}
 
+const nuevoPassword = async (req,res) => {
+    // Validar el password
+    await check('password').isLength({ min: 2 }).withMessage('El password debe contener al menos 2 caracteres').run(req);
+
+    let errors = validationResult(req)
+    
+    // Verificar que el resultado esta vacio
+    if(!errors.isEmpty()){
+        // No esta vacio, entonces hay errores
+        return res.render('auth/resetPassword', {
+            pagina: 'Reestablece tu password',
+            csrfToken: req.csrfToken(),
+            errores: errors.array(), 
+        })
+    };
+
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // Identificar quien hace el cambio
+    const usuario = await Usuarios.findOne({where:{token}})
+
+    // Hashear el nuevo password
+
+    const salt = await bcrypt.genSalt(10)
+    usuario.password = await bcrypt.hash(password, salt);
+    usuario.token = null;
+
+    res.render('auth/confirmarCuenta',{
+        pagina: 'Password Reestablecido',
+        mensaje: 'El password se guardo correctamente =)'
+    })
+
+    await usuario.save();
+}
 
 export {
     formularioLogin,
+    autenticar,
     formularioRegistro,
     registrar,
     confirmar,
     formularioOlvidePassword,
-    resetPassword
+    resetPassword,
+    comprobarToken,
+    nuevoPassword
 }

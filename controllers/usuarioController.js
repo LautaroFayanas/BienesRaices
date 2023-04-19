@@ -1,8 +1,9 @@
 import {check, validationResult} from 'express-validator';
 import bcrypt from 'bcrypt'
-import { generarId } from '../helper/token.js'
+import { generarJWT,  generarId } from '../helper/token.js'
 import { emailOlvidePassword, emailRegistro } from '../helper/emails.js';
 import Usuarios from '../models/Usuario.js';
+import { comparar, encript } from '../helper/bcrypyCompare.js';
 
 
 const formularioLogin = (req,res) => {
@@ -12,17 +13,87 @@ const formularioLogin = (req,res) => {
     })
 };
 
-const autenticar = (req,res) => {
-    console.log('autenticando');
-}
 
 const formularioRegistro = (req,res) => {
-
+    
     res.render('auth/registro', {
         pagina: 'Crear Cuenta',
         csrfToken: req.csrfToken()
     })
 };
+
+const autenticar = async (req,res) => {
+
+    // Validacion
+    await check('email').isEmail().withMessage('El email es obligatorio').run(req)
+    await check('password').notEmpty().withMessage('El password es obligatorio').run(req);
+
+    let errors = validationResult(req)
+
+    // Verificar que el resultado esta vacio
+    if(!errors.isEmpty()){
+        // No esta vacio, entonces hay errores
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: errors.array()
+        })
+    };
+
+
+    const { email , password } = req.body;
+    // Comprobar si el Usuario existe
+    const usuario = await Usuarios.findOne( { where:{email} } )
+    if(!usuario){
+        return res.render('auth/login', {
+            errores: [{msg: 'El usuario no existe! '}]
+        })
+    };
+    
+    
+    // Comprobar si el Usuario esta Confirmado
+    if(!usuario.confirmado){
+        return res.render('auth/login', {
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'Tu cuenta no ha sido confirmada! '}]
+        })
+    };
+
+
+    // Password
+    // if(!usuario.password){
+    //     return res.render('auth/login', {
+    //         pagina: 'Iniciar Sesion',
+    //         csrfToken: req.csrfToken(),
+    //         errores: [{msg: 'Debes colocar un password! '}]
+    //     })
+    // };
+    
+
+
+    // Revisar el password
+
+    const checkPassword = comparar(password, usuario.password)
+    if(!checkPassword){
+        return res.render('auth/login',{
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'El password NO es el mismo! '}]
+        })
+    }
+
+    // Autenticar Usuario
+    const token = generarJWT({id: usuario.id , nombre: usuario.nombre})
+    console.log(token);
+
+    // Almacenar en un cookie
+    return res.cookie('_token', token , {
+        httpOnly: true
+    }).redirect('/mis-propiedades')
+
+}
+
 
 const registrar = async (req,res) => {
     
@@ -66,20 +137,19 @@ const registrar = async (req,res) => {
             }
         })
     }
-
     
+    
+    const hash = await bcrypt.hash(password,10)
     
     // Almacenar un Usuario
     const usuario = await Usuarios.create({
         nombre,
         email,
-        password,
         token: generarId(),
+        password:hash
     });
-    
-    const salt = await bcrypt.genSalt(10)
-    usuario.password = await bcrypt.hash(password, salt);
-    //res.json(usuario)
+        
+    res.json(usuario)
 
     // Enviando email de confirmacion
     emailRegistro({
@@ -95,6 +165,8 @@ const registrar = async (req,res) => {
     })      
 };
 
+
+
 // Comprueba una cuenta
 const confirmar = async (req,res) => {
     const { token } = req.params;
@@ -102,7 +174,7 @@ const confirmar = async (req,res) => {
     // Verificar si el Token es Valido
     const usuario = await Usuarios.findOne({where: {token}})
     if(!usuario){
-       return res.render('auth/confirmarCuenta',{
+        return res.render('auth/confirmarCuenta',{
         pagina: 'Error al confirmar tu cuenta',
         mensaje: 'Hubo un error al confirmar tu cuenta, intenta de nuevo.',
         error: true
@@ -217,8 +289,7 @@ const nuevoPassword = async (req,res) => {
 
     // Hashear el nuevo password
 
-    const salt = await bcrypt.genSalt(10)
-    usuario.password = await bcrypt.hash(password, salt);
+    usuario.password = await encript(password);
     usuario.token = null;
 
     res.render('auth/confirmarCuenta',{

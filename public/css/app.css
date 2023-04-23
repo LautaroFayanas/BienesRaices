@@ -692,3 +692,11 @@ video {
 .successMessage{
   background-color: rgb(34 197 94);
 }
+
+.navegador{
+  margin-top: 10px;
+  margin-right: 15px;
+  display: flex;
+  padding: 15px;
+  gap: 15px ;
+}

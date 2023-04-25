@@ -24,6 +24,12 @@ block contenido
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for='titulo') Titulo de anuncio
                         input#titulo.w-full.px-2.py-1.border.border-gray-300.rounded-lg.placeholder-gray-400(placeholder='Titulo propiedad , ej. Casa en la playa' type='text' name='titulo')
 
+                     div
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for='descripcion') Descripcion
+                        textarea#descripcion.w-full.px-2.py-1.border.border-gray-300.rounded-lg.placeholder-gray-400(placeholder='Descripcion de la propiedad' name='descripcion')
+
+                     
+
                     div(class='md:flex md:gap-4 space-y-5 md:space-y-0')
                         div(class='md:w-1/2')
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for='categoria') Categoria
@@ -58,9 +64,19 @@ block contenido
                                 - var n = 1;
                                     while n < 4
                                         option(value = n) #{n++}
-                        
-                div
-                    #mapa.h-96
+
+                div.border-gray-200.border-t.y-5.space-y-4
+                    h3.text-lg.leading-6.font-medium.text-gray-900 Ubicacion
+                    p.text-gray-600 Ubica la propiedad en el mapa
+                    div
+                        #mapa.h-96
+
+                    div 
+                        p.calle
+
+                    input(type='hidden' name='calle' id='calle')
+                    input(type='hidden' name='lat' id='lat')
+                    input(type='hidden' name='lng' id='lng') 
 
                         
                         

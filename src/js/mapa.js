@@ -1,6 +1,6 @@
 (function() {
-    const lat = 41.9000792;
-    const lng = 12.4256885;
+    const lat = document.querySelector('#lat').value || 41.9000792;
+    const lng = document.querySelector('#lng').value || 12.4256885;
     const mapa = L.map('mapa').setView([lat, lng ], 16);
     let marker;
     
@@ -23,7 +23,6 @@
         marker = e.target
         const position = marker.getLatLng()
         mapa.panTo(new L.LatLng(position.lat , position.lng))
-        console.log(position);
         
         // Obtener informacion de las calles
         geocodeService.reverse().latlng(position, 13).run(function(error,resultado){

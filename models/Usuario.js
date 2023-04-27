@@ -23,6 +23,14 @@ const Usuarios = db.define('usuarios', {
     confirmado: {
         type: DataTypes.BOOLEAN
     }
+},{
+    scopes: {
+        eliminarPassword: {
+            attribute: {
+                exclude: ['password' , 'token' , 'confirmado' , 'createdAt' , 'updatedAt']
+            }
+        }
+    }
 });
 
 

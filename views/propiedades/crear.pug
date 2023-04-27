@@ -60,7 +60,7 @@ block contenido
                                 option(value='') - Seleccione -
                                 - var n = 1;
                                     while n < 6
-                                        option(value = n) #{n++}
+                                        option(value = n selected= datos.habitaciones ? datos.habitaciones == n ? true : false : null) #{n++}
 
 
 
@@ -70,7 +70,7 @@ block contenido
                                 option(value='') - Seleccione -
                                 - var n = 1;
                                     while n < 4
-                                        option(value = n) #{n++}
+                                        option(value = n selected= datos.estacionamiento ? datos.estacionamiento == n ? true : false : null) #{n++}
 
 
 
@@ -80,7 +80,7 @@ block contenido
                                 option(value='') - Seleccione -
                                 - var n = 1;
                                     while n < 4
-                                        option(value = n) #{n++}
+                                        option(value = n selected= datos.baños ? datos.baños == n ? true : false : null) #{n++}
 
 
 
@@ -91,11 +91,11 @@ block contenido
                         #mapa.h-96
 
                     div 
-                        p.calle
+                        p.calle= datos.calle ? datos.calle : ''
 
-                    input(type='hidden' name='calle' id='calle')
-                    input(type='hidden' name='lat' id='lat')
-                    input(type='hidden' name='lng' id='lng') 
+                    input(type='hidden' name='calle' id='calle' value=datos.calle ? datos.calle : '')
+                    input(type='hidden' name='lat' id='lat' value=datos.lat ? datos.lat : '')
+                    input(type='hidden' name='lng' id='lng' value=datos.lng ? datos.lng : '') 
 
                 input(type="submit" value='Agrega tu imagen' class='w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-bold uppercase cursor-pointer')
                         

@@ -1,8 +1,8 @@
 import {check, validationResult} from 'express-validator';
 import bcrypt from 'bcrypt'
+import Usuarios from '../models/Usuario.js';
 import { generarJWT,  generarId } from '../helper/token.js'
 import { emailOlvidePassword, emailRegistro } from '../helper/emails.js';
-import Usuarios from '../models/Usuario.js';
 import { comparar, encript } from '../helper/bcrypyCompare.js';
 
 

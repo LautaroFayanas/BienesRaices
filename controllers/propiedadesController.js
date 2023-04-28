@@ -50,21 +50,29 @@ const guardar = async (req,res) => {
 
     // Crear un registro
 
-    const { titulo , descripcion , habitaciones , estacionamientos , baños , calle , alt , lng , precio , categoria  } = req.body;
+    const { titulo , descripcion , habitaciones , estacionamiento , baños , calle , lat , lng , precio , categoria  } = req.body;
+    
+    const { id: usuarioId } = req.usuario
 
     try {
         const propiedadAlmacenadaEnDB = await Propiedad.create({
             titulo ,
             descripcion ,
             habitaciones , 
-            estacionamientos , 
+            estacionamiento , 
             baños ,
             calle ,
             lat ,
             lng ,
             precioId: precio,
-            categoriaId: categoria
+            categoriaId: categoria,
+            usuarioId,
+            img: ''
         })
+
+        const { id } = propiedadAlmacenadaEnDB
+
+        res.redirect(`/propiedades/agregar-imagen/${id}`)
 
     } catch (error) {
         console.log(error);

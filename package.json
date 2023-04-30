@@ -39,6 +39,7 @@
     "cookie-parser": "^1.4.6",
     "csurf": "^1.11.0",
     "dotenv": "^16.0.3",
+    "dropzone": "^5.9.3",
     "express-validator": "^6.15.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0",

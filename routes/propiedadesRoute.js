@@ -23,6 +23,12 @@ router.post('/propiedades/crear' ,
     body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
     guardar )    
 
-router.get('/propiedades/agregar-imagen/:id', agregarImagen)
+router.get('/propiedades/agregar-imagen/:id',
+    protegerRuta,
+    agregarImagen)
+
+router.post('/propiedades/agregar-imagen/:id' , (req,res) => {
+    console.log('subiendo imagen...');
+})
 
 export default router;

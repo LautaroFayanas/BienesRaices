@@ -6,7 +6,6 @@ block styles
     meta(name='csrf-token' content= csrfToken)
 
 block contenido 
-
     .py-1
         h1.text-4xl.my-3.font-extrabold.text-center Bienes
             span.font-normal Raices
@@ -14,7 +13,7 @@ block contenido
 
 
         div(class='bg-white shadow py-8 px-4 rounded mx-auto max-w-4xl my-10 md:px-10')
-            form(id="imagenDrop" class='dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center items-center')(method='POST' action=`/propiedades/agregar-imagen/${propiedad.id}`)
+            form(id="imagen" class='dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center items-center' method='POST' action=`/propiedades/agregar-imagen/${propiedad.id}`)
                 input(type="hidden" name="_csrf" value=csrfToken)
 
             input(type="submit" value='Publicar Propiedad' class='mt-5 w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-bold uppercase cursor-pointer')

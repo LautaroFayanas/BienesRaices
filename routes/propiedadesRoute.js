@@ -1,10 +1,8 @@
 import Express from "express";
 import { body } from 'express-validator'
-import {admin , crear , guardar, agregarImagen} from "../controllers/propiedadesController.js";
+import {admin , crear , guardar, agregarImagen, almacenarImange} from "../controllers/propiedadesController.js";
 import protegerRuta from "../middleware/protegerRuta.js";
-
-
-
+import upload from "../middleware/subirImagen.js";
 
 
 const router = Express.Router();
@@ -27,8 +25,10 @@ router.get('/propiedades/agregar-imagen/:id',
     protegerRuta,
     agregarImagen)
 
-router.post('/propiedades/agregar-imagen/:id' , (req,res) => {
-    console.log('subiendo imagen...');
-})
+router.post('/propiedades/agregar-imagen/:id' , 
+    protegerRuta,
+    upload.single('imagen'), // Si son muchas imagenes para subir se usa .array()
+    almacenarImange
+)
 
 export default router;

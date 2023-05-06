@@ -109,7 +109,7 @@ const agregarImagen = async(req,res)=>{
     })
 }
 
-const almacenarImange = async(req,res) => {
+const almacenarImange = async(req,res,next) => {
     const { id } = req.params
 
     const propiedad = await Propiedad.findByPk(id)
@@ -127,12 +127,14 @@ const almacenarImange = async(req,res) => {
     }
 
     try {
-        console.log(req.file);
+        // console.log(req.file);
 
         // Almacenar la Imagen y publicar la Propiedad
         propiedad.img = req.file.filename
         propiedad.publicado = 1
         await propiedad.save()
+       
+        next()
 
     } catch (error) {
         console.log(error);

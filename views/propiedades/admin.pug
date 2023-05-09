@@ -6,4 +6,35 @@ block contenido
             span.font-normal Raices
         h2.text-center.text-2xl.font-extrabold= pagina
 
-        a(href="/propiedades/crear" class="px-4 py-3 rounded-lg inline-block my-2 bg-indigo-600 hover:bg-indigo-700 text-sm font-bold text-center text-white uppercase w-16 md:w-32 lg:w-48 ") Publicar Propiedad
+        a(href="/propiedades/crear" class="px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-bold text-center text-white uppercase inline-block w-full sm:w-auto my-10") Publicar Propiedad
+
+
+        //-pre= JSON.stringify(propiedades, undefined, 2)
+        
+        if propiedades.length
+        
+            div(class='bg-white shadow rounded-lg')
+                ul(class='divide-y divide-grey-200')
+                    each propiedad in propiedades
+                        li
+                            div(class='p-6 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-8 gap-4')
+
+                                div(class='sm:w-1/4 md:w-1/6') 
+                                    img(src=`upload/${propiedad.img}` alt=`imagen propiedad ${propiedad.titulo}`)
+
+                                div(class='sm:w-2/4 md:w-3/6 lg:w-4/6 space-y-3') 
+                                    a(class='block text-2xl font-extrabold text-indigo-600 truncate' href="#")= propiedad.titulo
+                                    p(class='text-sm text-black font-bold')= propiedad.categoria.nombre
+                                    p(class='text-sm text-gray-500 font-bold')= propiedad.precio.nombre
+
+                                div(class='sm:w-1/4 md:w-2/6 lg:flex-1 flex flex-col lg:flex-row gap-2') 
+                                    form(action='#')
+                                        input(type='submit' class=`w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded-lg cursor-pointer ${propiedad.publicado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}` value=`${propiedad.publicado ? 'Publicado' : 'No publicado'}`)
+
+                                    a(href="#" class='text-center px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded-lg cursor-pointer bg-indigo-100 text-indigo-800') Editar
+
+                                    form(action='#')
+                                        input(type='submit' class=`w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded-lg cursor-pointer bg-red-100 text-red-800` value='Eliminar')
+
+        else
+            p.text-center No hay propiedades

@@ -1,6 +1,6 @@
 import Express from "express";
 import { body } from 'express-validator'
-import {admin , crear , guardar, agregarImagen, almacenarImange , editar , guardarCambios} from "../controllers/propiedadesController.js";
+import {admin , crear , guardar, agregarImagen, almacenarImange , editar , guardarCambios, eliminar} from "../controllers/propiedadesController.js";
 import protegerRuta from "../middleware/protegerRuta.js";
 import upload from "../middleware/subirImagen.js";
 
@@ -46,6 +46,11 @@ router.post('/propiedades/editar/:id' ,
     body('estacionamiento').isNumeric().withMessage('Selecciona la cantidad de estacionamientos'),  
     body('baños').isNumeric().withMessage('Selecciona la cantidad de baños'),
     body('lat').notEmpty().withMessage('Ubica la propiedad en el mapa'),
-    guardarCambios )    
+    guardarCambios)    
+
+router.post('/propiedades/eliminar/:id',
+    protegerRuta,
+    eliminar
+)
 
 export default router;

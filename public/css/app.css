@@ -503,9 +503,6 @@ video {
     max-width: 1536px;
   }
 } 
-.m-auto {
-  margin: auto;
-} 
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -549,6 +546,9 @@ video {
 .hidden {
   display: none;
 } 
+.h-80 {
+  height: 20rem;
+} 
 .h-96 {
   height: 24rem;
 } 
@@ -557,6 +557,12 @@ video {
 } 
 .min-h-screen {
   min-height: 100vh;
+} 
+.w-3\/4 {
+  width: 75%;
+} 
+.w-4\/5 {
+  width: 80%;
 } 
 .w-full {
   width: 100%;

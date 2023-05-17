@@ -4,8 +4,19 @@ import { Precio, Categoria, Propiedad } from '../models/index.js'
 
 const admin = async (req,res) => {
 
+    // Leer query String
+    const { pagina: paginaActual } = req.query
+
+    const expresionRegular = /^[0-9]$/
+
+    if(!expresionRegular.test(paginaActual)){
+        return res.redirect('/mis-propiedades?pagina=1')
+    }
+
+
     const { id } = req.usuario;
     console.log(id);
+
     const propiedades = await Propiedad.findAll({
         where: {
             usuarioId: id

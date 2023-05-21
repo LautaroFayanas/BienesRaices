@@ -4,11 +4,13 @@ block styles
     link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
 
 block contenido
+    div(class='py-5')
+        h1(class='text-center text-4xl font-extrabold') Ubicacion en el mapa
 
-
-
-
+        div(id='mapa-inicio' class='h-[600px] mx-auto w-4/5 mt-5')
+ 
 
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+    script(src="/js/mapaInicio.js") 

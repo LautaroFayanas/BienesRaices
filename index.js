@@ -4,6 +4,7 @@ import csrf from 'csurf'
 import cookieParser from 'cookie-parser'
 import usuarioRoute from './routes/usuarioRoute.js'
 import propiedadesRoute from './routes/propiedadesRoute.js'
+import appRoutes from './routes/appRoutes.js'
 import db from './config/db.js'
 
 
@@ -39,6 +40,7 @@ app.use(express.static('public'))
 
 
 // Routing
+app.use('/' , appRoutes)
 app.use('/auth' , usuarioRoute )
 app.use('/' , propiedadesRoute )
 

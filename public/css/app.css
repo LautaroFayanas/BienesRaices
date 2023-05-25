@@ -564,26 +564,11 @@ video {
 .h-96 {
   height: 24rem;
 } 
-.h-auto {
-  height: auto;
-} 
-.h-\[\] {
-  height: ;
-} 
 .h-\[600px\] {
   height: 600px;
 } 
-.h-\[650px\] {
-  height: 650px;
-} 
-.h-\[60px\] {
-  height: 60px;
-} 
-.h-\[550px\] {
-  height: 550px;
-} 
-.h-\[500px\] {
-  height: 500px;
+.h-auto {
+  height: auto;
 } 
 .min-h-screen {
   min-height: 100vh;

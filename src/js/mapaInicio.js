@@ -35,7 +35,14 @@
             })
             
             .addTo(mapa)
-            .bindPopup('Mas informacion')
+            .bindPopup(`
+            <p class='text-indigo-600 font-bold'>${propiedad.categoria.nombre}</p>
+                <h1 class='text-sm font-extrabold uppercase my-2'> ${propiedad?.titulo} </h1>
+                <img src='/upload/${propiedad?.img}' alt='Imagen de la propiedad' />
+                <p class='text-gray-600 font-bold'>${propiedad.precio.nombre}</p>
+                <a href='/propiedad/${propiedad.id}' class='bg-indigo-600 block p-2 text-center font-bold uppercase text-white'>Ver Propiedades</a>
+
+            `)
             markers.addLayer(marker)
             
         })

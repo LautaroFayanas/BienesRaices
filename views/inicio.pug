@@ -4,7 +4,7 @@ block styles
     link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
 
 block contenido
-    div(class='py-5')
+    div(class='py-5 mx-auto w-4/5')
         h1(class='text-center text-4xl font-extrabold') Ubicacion en el mapa
         h2(class='text-sm uppercase text-gray-800 font-bold py-10 mx-10') Filtrar Propiedades:
 
@@ -23,8 +23,24 @@ block contenido
                     each precio in precios
                         option(value=precio.id)= precio.nombre 
 
-        div(id='mapa-inicio' class='h-[600px] mx-auto w-4/5 mt-5')
- 
+        div(id='mapa-inicio' class='h-[500px] mx-auto mt-5')
+        
+        section(class='py-5')
+            h2(class='text-center text-4xl font-bold py-10') Casas en Venta
+
+            div(class='grid grid-cols-1 md:grid-cols-3 gap-5 mt-5')
+                each casa in casas
+                    div(class='bg-white shadow rounded-lg')
+                        img(class='object-cover h-72 w-full' src=`/upload/${casa.img}` alt=`imagen ${casa.titulo}`)
+                        div(class='p-5 space-y-2')
+                            h3(class='text-2xl font-bold')= casa.titulo.substring(0 , 27)
+                            p(class='text-sm text-gray-600') Habitaciones: 
+                                span(class='text-gray-800 font-bold')= casa.habitaciones
+                            p(class='text-sm text-gray-600') Baños: 
+                                span(class='text-gray-800 font-bold')= casa.baños
+                            p(class='text-sm text-gray-600') Precio:   
+                                span(class='text-gray-800 font-bold')= casa.precio.nombre
+                            a(href=`/propiedad/${casa.id}` class='bg-indigo-600 w-full text-center block font-bold text-white p-2 uppercase rounded-lg') Ver Propiedad 
 
 
 block scripts

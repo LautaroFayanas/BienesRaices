@@ -47,15 +47,37 @@ const inicio = async(req,resp) =>{
 
 }
 
-const categoria = (req,resp) =>{
+const categoria = async(req,res) =>{
+    const { id } = req.params
+    
+    // Comprobar que la categoria exista
+    const categoria = await Categoria.findByPk(id)
+    if(!categoria){
+       return res.redirect('/404')
+    }
+
+    // Obtener las propiedades de la categoria
+    const propiedades = await Propiedad.findAll({
+        where: {
+            categoriaId: id
+        },
+        include: [
+            {model: Precio, as: 'precio'}
+        ]
+    })
+
+    res.render('categoria' , {
+        pagina: 'Categoria',
+        propiedades
+    })
 
 }
 
-const noEncontrado = (req,resp) =>{
+const noEncontrado = (req,res) =>{
 
 }
 
-const buscador = (req,resp) =>{
+const buscador = (req,res) =>{
 
 }
 

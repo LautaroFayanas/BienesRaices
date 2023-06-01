@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 import {admin , crear , guardar, agregarImagen, almacenarImange , editar , guardarCambios, eliminar , mostrarPropiedad} from "../controllers/propiedadesController.js";
 import protegerRuta from "../middleware/protegerRuta.js";
 import upload from "../middleware/subirImagen.js";
+import identificarUsuario from '../middleware/identificarUsuario.js'
 
 
 const router = Express.Router();
@@ -55,6 +56,7 @@ router.post('/propiedades/eliminar/:id',
 
 // Area Publica
 router.get('/propiedad/:id', 
+        identificarUsuario,
     mostrarPropiedad
 )
 

@@ -532,10 +532,6 @@ video {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 } 
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-} 
 .mb-2 {
   margin-bottom: 0.5rem;
 } 
@@ -569,9 +565,6 @@ video {
 .h-72 {
   height: 18rem;
 } 
-.h-80 {
-  height: 20rem;
-} 
 .h-96 {
   height: 24rem;
 } 
@@ -580,6 +573,9 @@ video {
 } 
 .h-auto {
   height: auto;
+} 
+.h-80 {
+  height: 20rem;
 } 
 .min-h-screen {
   min-height: 100vh;
@@ -616,9 +612,6 @@ video {
 } 
 .items-center {
   align-items: center;
-} 
-.justify-normal {
-  justify-content: normal;
 } 
 .justify-center {
   justify-content: center;

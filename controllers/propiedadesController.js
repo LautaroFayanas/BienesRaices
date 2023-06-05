@@ -1,7 +1,8 @@
 import { unlink } from 'node:fs/promises'
 import { validationResult } from "express-validator"
-import { Precio, Categoria, Propiedad } from '../models/index.js'
-import { esVendedor  } from '../helper/index.js'
+import { Precio, Categoria, Propiedad , Usuario } from '../models/index.js'
+import { esVendedor , formatearFecha } from '../helper/index.js'
+import Mensaje from '../models/mensaje.js'
 
 const admin = async (req,res) => {
 
@@ -31,7 +32,8 @@ const admin = async (req,res) => {
             },
             include: [
                 {model: Categoria, as: 'categoria'},
-                {model: Precio, as: 'precio'}
+                {model: Precio, as: 'precio'} ,
+                {model: Mensaje, as: 'mensajes'}
             ]
         }),
         Propiedad.count({
@@ -366,13 +368,68 @@ const enviarMensaje = async(req,res) => {
             csrfToken: req.csrfToken(),
             usuario: req.usuario,
             esVendedor: esVendedor(req.usuario?.id , propiedad.usuarioId),
-            errores: resultado.array()
+            errores: resultado.array(),
+            enviado: true
         })
 
     }
+
+    const { mensaje } = req.body
+    const { id: propiedadId } = req.params
+    const { id: usuarioId } = req.usuario
+
+    // Almacenar el mensaje
+    await Mensaje.create({
+        mensaje,
+        propiedadId,
+        usuarioId
+    })
+
+
+    return res.render('propiedades/mostrar', {
+        propiedad,
+        pagina: Propiedad.titulo,
+        csrfToken: req.csrfToken(),
+        usuario: req.usuario,
+        esVendedor: esVendedor(req.usuario?.id , propiedad.usuarioId),
+        enviado: true
+    })
     
 
 }
+
+// Leer mensaje recibidos
+const leerMensajes = async(req,res) => {
+
+    const { id } = req.params
+
+    const propiedad = await Propiedad.findByPk(id , {
+        include: [
+            {model: Mensaje, as: 'mensajes' , 
+                include:[
+                    {model: Usuario.scope('eliminarPassword') , as: 'usuario'}
+                ]}
+        ]
+    })
+
+    if(!propiedad){
+        return res.redirect('/mis-propiedades')
+    }
+
+    // Revisar que quien visita la URL es quien creo la propiedad
+    if(propiedad.usuarioId.toString() !== req.usuario.id.toString()){
+        return res.redirect('/mis-propiedades')
+    }
+
+    res.render('propiedades/mensajes', {
+        pagina: 'Mensajes',
+        mensajes: propiedad.mensajes,
+        formatearFecha
+        
+    })
+
+}
+
 
 export {
     admin,
@@ -384,5 +441,6 @@ export {
     guardarCambios,
     eliminar,
     mostrarPropiedad,
-    enviarMensaje
+    enviarMensaje,
+    leerMensajes
 }

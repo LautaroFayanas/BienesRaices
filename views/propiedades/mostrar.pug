@@ -1,5 +1,6 @@
 extends ../layout/app
 
+
 block styles 
     link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
 
@@ -76,7 +77,9 @@ block contenido
                         else 
                             div(class='text-center gap-2')
                                 p Si deseas contactar al vendedor
-                                a(href="/auth/crear-cuenta" class='text-indigo-600') debes crear una cuenta
+                                a(href="/auth/registro" class='text-indigo-600') debes crear una cuenta
+                                p o 
+                                a(href="/auth/login" class='text-indigo-600') Iniciar Sesion
                 
 
 block scripts

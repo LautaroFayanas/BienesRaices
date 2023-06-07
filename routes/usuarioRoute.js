@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { formularioLogin, formularioRegistro , formularioOlvidePassword , registrar , confirmar, resetPassword, nuevoPassword, comprobarToken, autenticar } from "../controllers/usuarioController.js";
+import { formularioLogin, formularioRegistro , formularioOlvidePassword , registrar , cerrarSesion , confirmar, resetPassword, nuevoPassword, comprobarToken, autenticar } from "../controllers/usuarioController.js";
 
 
 const router = express.Router()
@@ -7,6 +7,9 @@ const router = express.Router()
 // Routing
 router.get('/login', formularioLogin)
 router.post('/login', autenticar)
+
+// Cerrar sesion
+router.post('/cerrar-sesion' , cerrarSesion)
 
 router.get('/registro', formularioRegistro)
 router.post('/registro', registrar)
